@@ -289,6 +289,6 @@ if __name__ == '__main__':
         if(sys.argv[2] == 'logistic_regression'):
             run_spam_classify(sys.argv[3], sys.argv[4], split=True,  sample='all', methods='logistic_regression')
         elif(sys.argv[2] == 'probabilistic_generative'):
-            run_spam_classify(sys.argv[3], sys.argv[4], split=False, sample='all', methods='probablistic_generative')
+            run_spam_classify(sys.argv[3], sys.argv[4], split=False, sample='all', methods='probabilistic_generative')
     elif(sys.argv[1] == 'test'):
         make_test_classify(sys.argv[3], sys.argv[2], sys.argv[4])
