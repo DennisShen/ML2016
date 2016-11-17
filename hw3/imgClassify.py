@@ -61,7 +61,7 @@ def split_validation(X):
 def do_CNN(X_train_label, y_train_label, X_valid_label, y_valid_label, X_unlabel, self_learning, clustering, y_unlabel, model_name):
     batch_size        = 32
     nb_classes        = 10
-    nb_epoch          = 1
+    nb_epoch          = 200
     data_augmentation = True
     threshold         = 0.9
     iteration         = 2 if self_learning == 'T' else 1
@@ -190,15 +190,15 @@ def img_clustering(X_label, X_unlabel, X_test):
     X_all = np.concatenate((X_label, X_unlabel), axis=0)
     
     autoencoder.fit(X_all, X_all,
-                    nb_epoch=1,
+                    nb_epoch=50,
                     batch_size=32,
                     shuffle=True,
                     validation_data=(X_test, X_test))
     
     encoder = Model(input_img, encoded)
     
-    #print('save encoder...\n')
-    #encoder.save('encoder.h5')
+    print('save encoder...\n')
+    encoder.save('encoder.h5')
     
     X_label_code   = encoder.predict(X_label)
     X_unlabel_code = encoder.predict(X_unlabel)
