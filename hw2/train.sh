@@ -1,3 +1,3 @@
 #/!bin/bash
 
-python spamClass.py 'train' 'logistic_regression' $1 $2
+python spamClass.py 'train' 'probabilistic_generative' $1 $2
