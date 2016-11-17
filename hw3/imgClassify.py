@@ -161,7 +161,7 @@ def do_CNN(X_train_label, y_train_label, X_valid_label, y_valid_label, X_unlabel
             Y_train_new  = np.concatenate((Y_train_label, Y_train_add), axis=0)
     
     print('save model...\n')
-    model.save(model_name)
+    model.save(model_name+'.h5')
 
 def img_clustering(X_label, X_unlabel, X_test):    
     input_img = Input(shape=(3, 32, 32))
@@ -214,7 +214,7 @@ def img_clustering(X_label, X_unlabel, X_test):
     return y_unlabel
     
 def do_test(predict, model_file, X_test):
-    model = load_model(model_file)
+    model = load_model(model_file+'.h5')
     
     test_predict_class = model.predict_classes(X_test)
     
