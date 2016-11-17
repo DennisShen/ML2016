@@ -16,6 +16,7 @@ from keras.models import load_model
 from keras.layers import Input, UpSampling2D
 from keras.models import Model
 from sklearn.metrics.pairwise import cosine_similarity
+from keras import backend as K
 
 import cPickle as pickle
 import numpy as np
@@ -249,6 +250,7 @@ def run_img_classification(is_train, path, model, predict='', self_learning='F',
         do_test(predict, model, X_test)
 
 if __name__ == '__main__':
+    K.set_image_dim_ordering('th')
     if sys.argv[1]=='train':
         run_img_classification(is_train=sys.argv[1], path=sys.argv[2], model=sys.argv[3], 
                                self_learning=sys.argv[4], clustering=sys.argv[5], use_test_to_train=sys.argv[6])
