@@ -1,3 +1,3 @@
 #/!bin/bash
 
-python imgClassify.py 'train' $1 $2 'T' 'F' 'T'
+python imgClassify.py 'train' $1 $2 'F' 'T' 'F'
