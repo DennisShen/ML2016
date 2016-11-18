@@ -164,23 +164,32 @@ def do_CNN(X_train_label, y_train_label, X_valid_label, y_valid_label, X_unlabel
     print('save model...\n')
     model.save(model_name+'.h5')
 
-def img_clustering(X_label, X_unlabel, X_test):    
+def img_clustering(X_label, X_unlabel, X_test): 
     input_img = Input(shape=(3, 32, 32))
 
-    x = Convolution2D(32, 3, 3, activation='relu', border_mode='same')(input_img)
+    x = Convolution2D(8, 3, 3, activation='relu', border_mode='same')(input_img)
     x = MaxPooling2D((2, 2), border_mode='same')(x)
     x = Convolution2D(16, 3, 3, activation='relu', border_mode='same')(x)
     x = MaxPooling2D((2, 2), border_mode='same')(x)
-    x = Convolution2D(16, 3, 3, activation='relu', border_mode='same')(x)
-    encoded = MaxPooling2D((2, 2), border_mode='same')(x)
+    x = Convolution2D(32, 3, 3, activation='relu', border_mode='same')(x)
+    x = MaxPooling2D((2, 2), border_mode='same')(x)
+    x = Convolution2D(64, 3, 3, activation='relu', border_mode='same')(x)
+    x = MaxPooling2D((2, 2), border_mode='same')(x)
+    x = Convolution2D(128, 3, 3, activation='relu', border_mode='same')(x)
+    x = MaxPooling2D((2, 2), border_mode='same')(x)
+    encoded = Convolution2D(256, 3, 3, activation='relu', border_mode='same')(x)
 
-    # at this point the representation is (16, 4, 4) i.e. 256-dimensional
+    # at this point the representation is (256, 1, 1) i.e. 256-dimensional
 
-    x = Convolution2D(16, 3, 3, activation='relu', border_mode='same')(encoded)
+    x = Convolution2D(128, 3, 3, activation='relu', border_mode='same')(encoded)
     x = UpSampling2D((2, 2))(x)
-    x = Convolution2D(16, 3, 3, activation='relu', border_mode='same')(x)
+    x = Convolution2D(64, 3, 3, activation='relu', border_mode='same')(x)
     x = UpSampling2D((2, 2))(x)
     x = Convolution2D(32, 3, 3, activation='relu', border_mode='same')(x)
+    x = UpSampling2D((2, 2))(x)
+    x = Convolution2D(16, 3, 3, activation='relu', border_mode='same')(x)
+    x = UpSampling2D((2, 2))(x)
+    x = Convolution2D(8, 3, 3, activation='relu', border_mode='same')(x)
     x = UpSampling2D((2, 2))(x)
     decoded = Convolution2D(3, 3, 3, activation='sigmoid', border_mode='same')(x)
 
@@ -191,15 +200,12 @@ def img_clustering(X_label, X_unlabel, X_test):
     X_all = np.concatenate((X_label, X_unlabel), axis=0)
     
     autoencoder.fit(X_all, X_all,
-                    nb_epoch=50,
+                    nb_epoch=20,
                     batch_size=32,
                     shuffle=True,
                     validation_data=(X_test, X_test))
     
     encoder = Model(input_img, encoded)
-    
-    print('save encoder...\n')
-    encoder.save('encoder.h5')
     
     X_label_code   = encoder.predict(X_label)
     X_unlabel_code = encoder.predict(X_unlabel)
